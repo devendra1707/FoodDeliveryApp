@@ -1,5 +1,6 @@
 package com.food.delivery.schedular;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -9,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 @ConditionalOnProperty(
         prefix = "app.scheduler.keep-alive",
         name = "enabled",
@@ -16,22 +18,25 @@ import org.springframework.web.client.RestTemplate;
 )
 public class KeepAliveScheduler {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     @Value("${app.base-url}")
     private String baseUrl;
 
     @Scheduled(cron = "${app.scheduler.keep-alive.cron}")
     public void keepAlive() {
+
         try {
+
             String response = restTemplate.getForObject(
                     baseUrl + "/api/health",
                     String.class
             );
 
-            log.info("Health Check : {}", response);
+            log.info("Health Check: {}", response);
 
         } catch (Exception ex) {
+
             log.error("Health check failed", ex);
         }
     }
