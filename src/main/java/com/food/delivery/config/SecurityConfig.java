@@ -37,7 +37,7 @@ public class SecurityConfig {
     httpSecurity
         .cors(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth -> auth.requestMatchers("/api/user/_register","/api/user/_login","/api/food/**","/api/orders/status/**","/api/orders/_all").
+        .authorizeHttpRequests(auth -> auth.requestMatchers("/api/user/_register","/api/user/_login","/api/food/**","/api/orders/status/**","/api/orders/_all","/api/health").
                 permitAll().anyRequest().authenticated()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
